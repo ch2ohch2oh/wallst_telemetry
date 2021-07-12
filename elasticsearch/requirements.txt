@@ -1,0 +1,5 @@
+elasticsearch
+kafka-python
+black
+python-dotenv
+pylint
