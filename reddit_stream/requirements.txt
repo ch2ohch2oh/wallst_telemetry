@@ -1,0 +1,7 @@
+praw
+loguru
+kafka-python
+python-dotenv
+click
+pylint
+black
