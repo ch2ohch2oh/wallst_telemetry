@@ -78,7 +78,7 @@ services:
       - KAFKA_HOST=kafka01:9092
       - PORT=3000
     ports:
-      - "3000:3000"
+      - "80:3000"
     depends_on: 
       - kafka01
   nlp:
