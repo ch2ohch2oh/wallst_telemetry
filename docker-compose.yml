@@ -1,0 +1,100 @@
+version: "2"
+
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: docker.io/bitnami/zookeeper:3.7
+    ports:
+      - "2181:2181"
+    volumes:
+      - "zookeeper_data:/bitnami"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka01:
+    container_name: kafka01
+    image: docker.io/bitnami/kafka:2
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    volumes:
+      - "kafka_data:/bitnami"
+    environment:
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka01:9092,EXTERNAL://localhost:9093
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+  es01:
+    container_name: es01
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.3
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - cluster.initial_master_nodes=es01
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes: 
+      - "es_data:/usr/share/elasticsearch/data"
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+  kibana01:
+    image: docker.elastic.co/kibana/kibana:7.13.3
+    container_name: kibana01
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://es01:9200
+      ELASTICSEARCH_HOSTS: '["http://es01:9200"]'
+    depends_on: 
+      - es01
+  reddit_stream:
+    build: reddit_stream
+    container_name: reddit_stream
+    environment:
+      - KAFKA_BOOTSTRAP_SERVER=kafka01:9092
+    depends_on:
+      - kafka01
+      - es01
+  kafka_to_es:
+    build: elasticsearch
+    container_name: kafka_to_es
+    environment:
+      - KAFKA_BOOTSTRAP_SERVER=kafka01:9092
+    depends_on: 
+      - kafka01
+      - es01
+  web:
+    build: web 
+    container_name: web 
+    environment: 
+      - KAFKA_HOST=kafka01:9092
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    depends_on: 
+      - kafka01
+  nlp:
+    build: nlp 
+    container_name: nlp 
+    environment: 
+      - KAFKA_BOOTSTRAP_SERVER=kafka01:9092
+      - ES_HOST=es01:9200
+    depends_on: 
+      - kafka01
+      - es01
+
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
+  es_data:
+    driver: local
