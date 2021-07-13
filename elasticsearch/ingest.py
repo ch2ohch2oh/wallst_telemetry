@@ -21,5 +21,7 @@ consumer.subscribe(["comments"])
 for comment in consumer:
     doc = json.loads(comment.value.decode())
     doc["created_utc"] = datetime.utcfromtimestamp(doc["created_utc"])
+    doc["len_chars"] = len(doc["body"])
+    doc["len_words"] = len(doc["body"].split())
     logging.info(doc)
     res = es.index(index="comments", id=doc["id"], body=doc)
