@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html {
+        font-family: Inter UI, -apple-system, BlinkMacSystemFont, Segoe UI,
+          Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+          Segoe UI Symbol;
+        font-weight: 400;
+        background-color: #fafbfd;
+      }
+
+      .banner {
+        text-align: center;
+      }
+
+      #kibanaFrame {
+        width: 100%;
+        height: 1400px;
+        border: none;
+      }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link href="/css/styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <h1 class="text-center">🚀🚀🚀Wallstreetbet telemetry🚀🚀🚀</h1>
+      </div>
+      <div class="row mb-5">
+        <h2>Live comments</h2>
+        <p>Lastest messages from the astranauts</p>
+        <div class="container-fluid" id="comments"></div>
+      </div>
+
+      <div class="row">
+        <h2>Live telemetry</h2>
+        <p>Lastest YOLO navigation data</p>
+        <iframe
+          src="http://localhost:5601/goto/479f6249a269d62e9df278a93ad54f1d"
+          frameborder="0"
+          id="kibanaFrame"
+        ></iframe>
+      </div>
+
+      <div class="row">
+        <p class="text-muted text-center">
+          Made with socket.io, kibana, elasticsearch, kibana and praw etc.<br />
+          <small>
+            Inspired by <a href="http://wallstreetbots.net">WallstreetBots</a>
+          </small>
+        </p>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/js/main.js"></script>
+  </body>
+</html>
