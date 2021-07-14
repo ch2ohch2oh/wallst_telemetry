@@ -64,6 +64,7 @@ services:
   reddit_stream:
     build: reddit_stream
     container_name: reddit_stream
+    restart: unless-stopped
     environment:
       - KAFKA_BOOTSTRAP_SERVER=kafka01:9092
     depends_on:
@@ -74,6 +75,7 @@ services:
     container_name: kafka_to_es
     environment:
       - KAFKA_BOOTSTRAP_SERVER=kafka01:9092
+      - ES_HOST=es01:9200
     depends_on:
       - kafka01
       - es01
