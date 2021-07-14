@@ -11,7 +11,7 @@ from datetime import datetime
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
 
-es = Elasticsearch(hosts=[os.getenv("ES_HOST")])
+es = Elasticsearch(hosts=[os.getenv("ES_HOST")], http_auth=('elastic', 'elastic=3.14'))
 logging.info("Connected to elasticsearch")
 
 consumer = KafkaConsumer(bootstrap_servers=os.getenv("KAFKA_BOOTSTRAP_SERVER"))
