@@ -31,7 +31,7 @@ def label_to_float(label):
         return -label.score
 
 
-es = Elasticsearch(hosts=[os.getenv("ES_HOST")])
+es = Elasticsearch(hosts=[os.getenv("ES_HOST")], http_auth=('elastic', 'elastic=3.14'))
 consumer = KafkaConsumer(bootstrap_servers=os.getenv("KAFKA_BOOTSTRAP_SERVER"))
 consumer.subscribe(["comments"])
 logging.info("Connected to kakfa")
